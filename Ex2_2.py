@@ -1,15 +1,12 @@
 import os 
 import sys
+import random
+import numpy as np
 
 import compas 
 from compas.datastructures import Mesh
 from compas_plotters import MeshPlotter
-from compas.geometry import cross_vectors
 from compas.utilities import pairwise
-from compas.topology import dijkstra_path
-import numpy as np
-import random
-
 
 def traverse_mesh(mesh, p_start):
     """Traverses a quad mesh from boundary to boundary in a "straight" line.
@@ -31,7 +28,6 @@ def traverse_mesh(mesh, p_start):
 
     sequence = [p_start]
     neighbors = mesh.vertex_neighbors(p_start)
-
     current = p_start
     if len(neighbors)==2:
         p = random.choice(neighbors)
@@ -59,11 +55,9 @@ def traverse_mesh(mesh, p_start):
             i = neighbors.index(previous)
             previous, current = current, neighbors[i - 2]
 
-    print(sequence)
-
+    # visualize path
     edges = []
     plotter = MeshPlotter(mesh, figsize=(10, 8), fontsize=6)
-
     for u, v in pairwise(sequence):
         if u<v:
             edges.append([u, v])
@@ -71,14 +65,14 @@ def traverse_mesh(mesh, p_start):
             edges.append([v, u])    
     plotter.draw_vertices(
                         facecolor={key: '#ff0000' for key in sequence},
-                        radius=0.025,
+                        radius=0.08,
+                        text='key', keys=sequence
                         )
 
     plotter.draw_edges(
                     color={(u, v): '#ff0000' for u, v in edges},
-                    width={(u, v): 4.0 for u, v in edges},
+                    width={(u, v): 2.0 for u, v in edges},
                     )
-
     plotter.show()
 
 if __name__ == "__main__":
