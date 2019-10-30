@@ -4,6 +4,8 @@ import numpy as np
 from compas.geometry import cross_vectors
 from compas.geometry import cross_vectors_xy
 from compas_plotters import Plotter
+from compas.geometry import Polygon
+from compas.geometry import Vector
 
 def cross_array_of_vectors_py (arr_1, arr_2):
     """Given two arrays of vectors of the same size, perform the cross product elemnt-wise w/o numpy.
@@ -129,6 +131,37 @@ def convex_polygon_area(polygon):
 
     return poly_area
 
+def convex_polygon_area_compas(polygon_vertices):
+    
+    """Compute the area of a convex polygon using compas.
+
+    Parameters
+    ----------
+    polygon : sequence
+        The XY coordinates of the vertices/corners of the polygon.
+        The vertices are assumed to be in order.
+        The polygon is assumed to be closed:
+        the first and last vertex in the sequence should not be the same.
+
+    Returns
+    -------
+    float
+        The area of the polygon.
+    """
+    
+    polygon = Polygon(polygon_vertices)
+    if not polygon.is_convex:
+        sys.exit("the polygon is not convex.")
+    
+    vectors=[]
+    centroid = polygon.centroid
+    area = 0.0
+    for p in polygon.points:
+        vectors.append(Vector.from_start_end(centroid, p))
+    for i in range(len(vectors)):
+        area += cross_vectors(vectors[i-1],vectors[i])[2]/2
+      
+    return area
 
 if __name__ == "__main__":
 
@@ -154,6 +187,7 @@ if __name__ == "__main__":
     plotter.show()
 
     print('The area of the polygon is: ', convex_polygon_area(my_polygon))
+    print('The area of the polygon using compas is: ', convex_polygon_area_compas(my_polygon))
 
     # Test task 1.3
     arr_1 = [[2.0, 0.0, 0.0],[1.0, 0.0, 1.0],[1.0, 0.5, 0.0]]
@@ -162,3 +196,5 @@ if __name__ == "__main__":
     print(cross_array_of_vectors_py(arr_1, arr_2))
     ## using numpy
     print(cross_array_of_vectors_np(arr_1, arr_2))
+
+    
