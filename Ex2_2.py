@@ -25,7 +25,7 @@ def traverse_mesh(mesh, p_start):
     None
 
     """  
-
+    # compute path
     sequence = [p_start]
     neighbors = mesh.vertex_neighbors(p_start)
     current = p_start
