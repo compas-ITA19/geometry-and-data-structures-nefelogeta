@@ -1,3 +1,10 @@
+import sys
+import numpy as np
+
+from compas.geometry import cross_vectors
+from compas.geometry import cross_vectors_xy
+from compas_plotters import Plotter
+
 def cross_array_of_vectors_py (arr_1, arr_2):
     """Given two arrays of vectors of the same size, perform the cross product elemnt-wise w/o numpy.
 
@@ -12,8 +19,6 @@ def cross_array_of_vectors_py (arr_1, arr_2):
         XYZ components of the resulting vectors.
 
     """
-    
-    import sys
 
     arr_len = len(arr_1)
     if not arr_len == len(arr_2):
@@ -28,30 +33,6 @@ def cross_array_of_vectors_py (arr_1, arr_2):
 
 
 def cross_array_of_vectors_np (arr_1, arr_2):
-    # from compas.geometry import area_polygon 
-    # from compas.geometry import centroid_polygon 
-    # from compas.geometry import centroid_polyhedron 
-    # from compas.geometry import circle_from_points 
-    # from compas.geometry import convex_hull 
-    # from compas.geometry import decompose_matrix 
-    # from compas.geometry import distance_point_line 
-    # from compas.geometry import distance_line_line 
-    # from compas.geometry import intersection_line_line 
-    # from compas.geometry import intersection_line_triangle 
-    # from compas.geometry import intersection_plane_plane 
-    # from compas.geometry import is_coplanar 
-    # from compas.geometry import is_point_in_triangle 
-    # from compas.geometry import local_to_world_coords 
-    # from compas.geometry import matrix_from_basis_vectors 
-    # from compas.geometry import normal_polygon 
-    # from compas.geometry import normal_triangle 
-    # from compas.geometry import offset_line 
-    # from compas.geometry import orient_points 
-    # from compas.geometry import orthonormalize_axes 
-    # from compas.geometry import plane_from_points 
-    # from compas.geometry import reflect_line_triangle 
-    # from compas.geometry import volume_polyhedron 
-
     """Given two arrays of vectors of the same size, perform the cross product elemnt-wise w/ numpy.
 
     Parameters
@@ -65,8 +46,6 @@ def cross_array_of_vectors_np (arr_1, arr_2):
         XYZ components of the resulting vectors.
 
     """
-    import sys
-    import numpy as np
 
     arr_len = len(arr_1)
     if not arr_len == len(arr_2):
@@ -75,6 +54,7 @@ def cross_array_of_vectors_np (arr_1, arr_2):
     x_products = np.cross(arr_1, arr_2)
 
     return x_products
+
 
 def orthonormals_from_two_vectors (u, v):
     """Given two non-parallel vectors, creates a set of three orthonormal vectors.
@@ -91,10 +71,6 @@ def orthonormals_from_two_vectors (u, v):
 
     """
 
-    import sys
-    import numpy as np
-    from compas.geometry import cross_vectors
-
     k = cross_vectors(u, v)
     # check if vectors are parallel
     if np.linalg.norm(k) == 0.0:
@@ -105,6 +81,7 @@ def orthonormals_from_two_vectors (u, v):
     j = j/np.linalg.norm(j)
 
     return [i, j, k]
+
 
 def convex_polygon_area(polygon):
     """Compute the area of a convex polygon (on the XY plane).
@@ -123,12 +100,6 @@ def convex_polygon_area(polygon):
         The area of the polygon.
 
     """    
-
-    import math
-    import sys
-    import numpy as np
-
-    from compas.geometry import cross_vectors_xy
 
     poly_len = len(polygon)
 
@@ -159,7 +130,6 @@ def convex_polygon_area(polygon):
     return poly_area
 
 
-
 if __name__ == "__main__":
 
     # Test task 1.1
@@ -169,7 +139,6 @@ if __name__ == "__main__":
     print(i,j,k)
 
     # Test task 1.2
-    from compas_plotters import Plotter
 
     plotter = Plotter()
 
@@ -184,7 +153,7 @@ if __name__ == "__main__":
     plotter.draw_polygons([{'points': my_polygon}])
     plotter.show()
 
-    print(convex_polygon_area(my_polygon))
+    print('The area of the polygon is: ', convex_polygon_area(my_polygon))
 
     # Test task 1.3
     arr_1 = [[2.0, 0.0, 0.0],[1.0, 0.0, 1.0],[1.0, 0.5, 0.0]]
